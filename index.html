@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#fdf6f0">
+  <title>Poppy Dash</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Poppy Dash</h1>
+      <p class="subtitle" id="current-date"></p>
+    </header>
+
+    <!-- Top summary cards - always visible -->
+    <div class="grid summary-grid">
+      <div class="card countdown-card">
+        <h2>Countdown</h2>
+        <div class="countdown-number" id="days-left"></div>
+        <p class="countdown-label">days to go</p>
+        <p class="due-date">Due: May 29, 2026</p>
+      </div>
+
+      <div class="card week-card">
+        <h2>Week Tracker</h2>
+        <div class="week-display">
+          <span class="week-number" id="current-week"></span>
+          <span class="week-label">weeks</span>
+        </div>
+        <div class="week-days" id="week-days"></div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <p class="progress-label" id="progress-label"></p>
+      </div>
+
+      <div class="card size-card">
+        <h2>Baby's Size</h2>
+        <div class="size-emoji" id="size-emoji"></div>
+        <p class="size-name" id="size-name"></p>
+        <p class="size-detail" id="size-detail"></p>
+      </div>
+
+      <div class="card milestone-card">
+        <h2>This Week's Milestones</h2>
+        <ul class="milestone-list" id="milestone-list"></ul>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="chores">Chores</button>
+      <button class="tab-btn" data-tab="appointments">Appointments</button>
+      <button class="tab-btn" data-tab="kicks">Kick Counter</button>
+      <button class="tab-btn" data-tab="contractions">Contractions</button>
+      <button class="tab-btn" data-tab="names">Names</button>
+      <button class="tab-btn" data-tab="shopping">Shopping</button>
+      <button class="tab-btn" data-tab="weight">Weight</button>
+    </nav>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Chores Tab -->
+      <div class="tab-pane active" id="tab-chores">
+        <div class="card full-width">
+          <div class="chore-header">
+            <h2>Things To Do Before Baby</h2>
+            <span class="chore-count" id="chore-count"></span>
+          </div>
+          <div class="chore-input-row">
+            <input type="text" id="chore-input" placeholder="Add a new task..." />
+            <button id="add-chore-btn">Add</button>
+          </div>
+          <ul class="chore-list" id="chore-list"></ul>
+        </div>
+      </div>
+
+      <!-- Appointments Tab -->
+      <div class="tab-pane" id="tab-appointments">
+        <div class="card full-width">
+          <div class="chore-header">
+            <h2>Upcoming Appointments</h2>
+            <span class="chore-count" id="appt-count"></span>
+          </div>
+          <div class="appt-form">
+            <div class="appt-form-row">
+              <input type="date" id="appt-date" />
+              <input type="time" id="appt-time" />
+            </div>
+            <div class="chore-input-row">
+              <input type="text" id="appt-input" placeholder="e.g., OB checkup, ultrasound, glucose test..." />
+              <button id="add-appt-btn">Add</button>
+            </div>
+          </div>
+          <ul class="appt-list" id="appt-list"></ul>
+        </div>
+      </div>
+
+      <!-- Kick Counter Tab -->
+      <div class="tab-pane" id="tab-kicks">
+        <div class="card full-width">
+          <h2>Kick Counter</h2>
+          <div class="kick-today">
+            <div class="kick-count" id="kick-count">0</div>
+            <p class="kick-label">kicks today</p>
+            <button class="kick-btn" id="kick-btn">Tap for Kick</button>
+            <button class="kick-reset" id="kick-reset">Reset Today</button>
+          </div>
+          <div class="kick-history">
+            <h3>Recent Days</h3>
+            <ul class="kick-log" id="kick-log"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contraction Timer Tab -->
+      <div class="tab-pane" id="tab-contractions">
+        <div class="card full-width">
+          <h2>Contraction Timer</h2>
+          <div class="contraction-controls">
+            <div class="contraction-display">
+              <div class="contraction-time" id="contraction-time">0:00</div>
+              <p class="contraction-status" id="contraction-status">Ready</p>
+            </div>
+            <div class="contraction-buttons">
+              <button class="contraction-start" id="contraction-start">Start</button>
+              <button class="contraction-stop" id="contraction-stop" disabled>Stop</button>
+            </div>
+          </div>
+          <div class="contraction-summary" id="contraction-summary"></div>
+          <ul class="contraction-log" id="contraction-log"></ul>
+          <button class="contraction-clear" id="contraction-clear">Clear All</button>
+        </div>
+      </div>
+
+      <!-- Names Tab -->
+      <div class="tab-pane" id="tab-names">
+        <div class="card full-width">
+          <div class="chore-header">
+            <h2>Name Ideas</h2>
+            <span class="chore-count" id="name-count"></span>
+          </div>
+          <div class="chore-input-row">
+            <input type="text" id="name-input" placeholder="Add a name idea..." />
+            <button id="add-name-btn">Add</button>
+          </div>
+          <ul class="name-list" id="name-list"></ul>
+        </div>
+      </div>
+
+      <!-- Shopping Tab -->
+      <div class="tab-pane" id="tab-shopping">
+        <div class="card full-width">
+          <div class="chore-header">
+            <h2>Shopping List</h2>
+            <span class="chore-count" id="shopping-count"></span>
+          </div>
+          <div class="shopping-form">
+            <div class="chore-input-row">
+              <select id="shopping-category">
+                <option value="Gear">Gear</option>
+                <option value="Clothes">Clothes</option>
+                <option value="Nursery">Nursery</option>
+                <option value="Feeding">Feeding</option>
+                <option value="Diapering">Diapering</option>
+                <option value="Health">Health</option>
+                <option value="Other">Other</option>
+              </select>
+              <input type="text" id="shopping-input" placeholder="Add item..." />
+              <button id="add-shopping-btn">Add</button>
+            </div>
+          </div>
+          <div id="shopping-groups"></div>
+        </div>
+      </div>
+
+      <!-- Weight Tracker Tab -->
+      <div class="tab-pane" id="tab-weight">
+        <div class="card full-width">
+          <h2>Weight / Belly Tracker</h2>
+          <div class="weight-form">
+            <div class="chore-input-row">
+              <input type="date" id="weight-date" />
+              <input type="number" id="weight-value" placeholder="Weight (lbs)" step="0.1" />
+              <input type="number" id="belly-value" placeholder="Belly (in)" step="0.1" />
+              <button id="add-weight-btn">Log</button>
+            </div>
+          </div>
+          <div class="weight-chart-container">
+            <canvas id="weight-chart" height="200"></canvas>
+          </div>
+          <ul class="weight-log" id="weight-log"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
