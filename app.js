@@ -613,6 +613,66 @@ document.getElementById('add-weight-btn').addEventListener('click', () => {
   renderWeight();
 });
 
+// ---- News Feed ----
+function timeAgo(dateStr) {
+  const now = new Date();
+  const date = new Date(dateStr);
+  const seconds = Math.floor((now - date) / 1000);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return minutes + 'm ago';
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return hours + 'h ago';
+  const days = Math.floor(hours / 24);
+  return days + 'd ago';
+}
+
+function renderNews(items) {
+  const list = document.getElementById('news-list');
+  if (!items || items.length === 0) {
+    list.innerHTML = '<li class="news-error">No stories available</li>';
+    return;
+  }
+  list.innerHTML = items.slice(0, 10).map(item => {
+    const title = item.title || 'Untitled';
+    const link = item.link || '#';
+    const pubDate = item.pubDate || '';
+    return `<li class="news-item">
+      <a href="${link}" target="_blank" rel="noopener">${title}</a>
+      ${pubDate ? `<div class="news-time">${timeAgo(pubDate)}</div>` : ''}
+    </li>`;
+  }).join('');
+}
+
+function fetchNews() {
+  const rssUrls = [
+    'https://feeds.nbcnews.com/msnbc/public/news',
+    'https://feeds.nbcnews.com/nbcnews/public/news',
+    'https://www.msnbc.com/feeds/latest'
+  ];
+  const proxyBase = 'https://api.rss2json.com/v1/api.json?rss_url=';
+
+  function tryFeed(index) {
+    if (index >= rssUrls.length) {
+      document.getElementById('news-list').innerHTML =
+        '<li class="news-error">Could not load news</li>';
+      return;
+    }
+    fetch(proxyBase + encodeURIComponent(rssUrls[index]))
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'ok' && data.items && data.items.length > 0) {
+          renderNews(data.items);
+        } else {
+          tryFeed(index + 1);
+        }
+      })
+      .catch(() => tryFeed(index + 1));
+  }
+
+  tryFeed(0);
+}
+
 // ---- Initialize ----
 function init() {
   const info = getPregnancyInfo();
@@ -628,6 +688,7 @@ function init() {
   renderNames();
   renderShopping();
   renderWeight();
+  fetchNews();
 }
 
 init();
